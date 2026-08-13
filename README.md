@@ -23,28 +23,84 @@ turno entrante.
 
 El piloto arranca en **Lima y sus distritos**, con proyección a escalar a nivel nacional.
 
-### Problemáticas críticas
+El enunciado es la fuente de la tarea, no una fuente de hechos. Sus afirmaciones y sus cifras se
+contrastan contra evidencia pública en [`docs/VALIDACION-PROBLEMA.md`](docs/VALIDACION-PROBLEMA.md);
+esta sección recoge el resultado de ese contraste.
 
-| # | Problema | Descripción |
+### 1.1 El desorden de horarios, en sus modos de falla
+
+La Contraloría General de la República auditó 16 hospitales de EsSalud en ocho regiones entre el 29 de
+noviembre y el 5 de diciembre de 2024. El desorden no es una queja genérica: se descompone en cuatro
+fallas que ocurren por separado y se verifican por separado.
+
+| # | Modo de falla | Extensión medida |
 |---|---|---|
-| P1 | Rotación de doctor | El diagnóstico del médico previo debe estar disponible antes del cambio de turno. |
-| P2 | Medianoche | Un paciente se agrava en turno noche: contactar rápido al médico encargado y manejar su indisponibilidad. |
-| P3 | Actualizaciones en tiempo real | Notificaciones push a múltiples médicos/enfermeras y persistencia del diagnóstico con disponibilidad permanente. |
+| MF-1 | La programación de turnos no existe o no sigue la normativa vigente | 63 % de los establecimientos |
+| MF-2 | La programación existe, pero sin la aprobación del director que EsSalud exige | 6 de 16 establecimientos |
+| MF-3 | La programación aprobada no se publica | 50 % de los establecimientos |
+| MF-4 | La ejecución del turno no queda registrada de forma verificable, con mención expresa de UCI | 75 % de los establecimientos |
 
-### Escalamiento esperado
+El valor del sistema está en convertir la programación en un artefacto aprobado, publicado y
+verificable. Almacenarla no basta: MF-2, MF-3 y MF-4 sobreviven a un sistema que solo la guarde.
 
-| Hito | Hospitales |
+### 1.2 Punto de partida
+
+El piloto no construye el registro clínico de la UCI. EsSalud opera desde 2019 la historia clínica
+electrónica ESSI en sus 409 establecimientos y 30 redes asistenciales, con más de 10,5 millones de
+pacientes registrados, y el país avanza hacia el RENHICE sobre los estándares HL7 y FHIR. Lo que el
+piloto añade es una **capa de continuidad de turno** sobre un registro que ya existe, y el diagnóstico
+que produce debe poder salir hacia el registro nacional.
+
+`[ACLARAR: si el piloto lee y escribe en ESSI o mantiene registro propio y lo reconcilia. La respuesta
+decide si el diagnóstico del turno es un dato propio del sistema o una vista sobre la historia clínica
+existente.]`
+
+### 1.3 Problemáticas críticas
+
+| # | Problema | Descripción | Qué añade el contraste |
+|---|---|---|---|
+| P1 | Rotación de doctor | El diagnóstico del médico previo debe estar disponible antes del cambio de turno. | La rotación de personal no intensivista es la situación de base y se intensifica: hay del orden de 900 intensivistas frente a los 3 000 requeridos, y desde febrero de 2026 la NTS N.° 244-MINSA/DGAIN-2026 dejó de exigir que la UCI sea conducida por especialista. La disponibilidad del diagnóstico es necesaria y no suficiente: el efecto medido proviene de la entrega **estructurada y con recepción verificada**. |
+| P2 | Medianoche | Un paciente se agrava en turno noche: contactar rápido al médico encargado y manejar su indisponibilidad. | El destinatario está fijado por norma: el médico programado en **guardia de retén**, convocado por el Jefe del Equipo de Guardia, en una ventana de 12 h (D. Leg. 559 y D. S. 024-2001-SA). «Programado en retén» es un estado de la programación de turnos, de modo que una falla de P1 degrada P2. |
+| P3 | Actualizaciones en tiempo real | Notificaciones push a múltiples médicos/enfermeras y persistencia del diagnóstico con disponibilidad permanente. | Notificar a varios, leído como difusión, agrava el problema que pretende resolver: en UCI entre el 72 % y el 99 % de las alarmas son falsas y la sobrenotificación degrada la respuesta a la que sí importa. La garantía exigible es notificación **dirigida, con acuse y escalamiento por vencimiento**, con destinatarios derivados del turno vigente. |
+
+### 1.4 Escalamiento esperado
+
+| Hito | Cifra del enunciado |
 |---|---|
 | Lanzamiento | 1 K |
 | 6 meses | 100 K |
 | 2 años | 10 M |
 
-### Metas de rendimiento
+Las cifras no admiten lectura como sedes hospitalarias. El Perú registra 247 hospitales y 25 242
+IPRESS activas de todas las categorías y sectores; EsSalud opera 409 establecimientos; el mundo suma
+del orden de 216 000 hospitales. La cifra de lanzamiento cuadruplica el total de hospitales del país y
+la de dos años supera unas 46 veces el total mundial.
+
+`[ACLARAR: qué cuentan las cifras de escalamiento. Personas registradas, camas, episodios de
+hospitalización y dispositivos conducen a entornos de carga distintos.]`
+
+`[SUPUESTO: la progresión 1 K, 100 K y 10 M cuenta personas registradas en el sistema y no sedes
+hospitalarias. Es la única lectura compatible con las magnitudes del sector y con los 10,5 millones de
+pacientes que EsSalud ya tiene en historia clínica electrónica.]`
+
+### 1.5 Metas de rendimiento
 
 - Inicio de aplicación: **< 1 s**
 - Configuración de aplicación: **< 5 s**
-- Disponibilidad: **99.9 %**
+- Disponibilidad: **99,9 %**
 - Recuperación ante caída: **< 5 min**
+
+Un 99,9 % admite 8 h 46 min de indisponibilidad al año y, con recuperación menor a 5 min, más de cien
+interrupciones anuales. Ninguna de las dos cifras distingue el momento en que la interrupción ocurre,
+siendo el cambio de turno la única ventana en que el enunciado declara crítica la disponibilidad del
+diagnóstico.
+
+`[ACLARAR: en qué ventana rige la disponibilidad de 99,9 %. Un mismo porcentaje mensual satisface o
+incumple el caso según se distribuya dentro o fuera de las ventanas de cambio de turno.]`
+
+`[SUPUESTO: el piloto opera sobre establecimientos con conectividad permanente. La operación tolerante
+a desconexión se exige a partir del escalamiento a regiones, donde 749 establecimientos de salud
+carecen de cobertura de internet.]`
 
 ---
 
@@ -91,7 +147,11 @@ Distinguimos **quién decide y paga** (clientes), **quién opera el sistema a di
 | Fuente | Restricción que impone |
 |---|---|
 | Ley N.° 29733 — Protección de Datos Personales | Datos de salud son categoría sensible: consentimiento, cifrado y trazabilidad de acceso |
+| D. S. N.° 016-2024-JUS — Reglamento de la Ley N.° 29733, vigente desde el 30 de marzo de 2025 | Notificación de una brecha de datos dentro de las 48 horas siguientes a su detección |
 | Ley N.° 30024 — RENHICE | Interoperabilidad de la historia clínica electrónica a nivel nacional |
+| D. S. N.° 020-2025-SA — modificación del reglamento del RENHICE | Marco vigente de intercambio; la validación nacional de interoperabilidad se ejecutó sobre HL7 y FHIR |
+| D. Leg. N.° 559 y D. S. N.° 024-2001-SA — Ley de Trabajo Médico y su reglamento | Jornada de 150 h mensuales con guardia incluida; guardia hospitalaria de hasta 12 h continuas; guardia de retén de 12 h, sin presencia física, convocada por el Jefe del Equipo de Guardia |
+| NTS N.° 244-MINSA/DGAIN-2026 — UPSS Cuidados Intensivos | Organización vigente de la unidad; deja sin efecto la exigencia de que la UCI sea conducida por especialista en medicina intensiva |
 | SUSALUD | Estándares de calidad y disponibilidad del registro clínico |
 
 ### 2.5 Justificación de las personas elegidas
@@ -146,7 +206,7 @@ Resultado del agente [`Spec/Eval-Spec.MD`](Spec/Eval-Spec.MD): **__ %**
 
 ```
 README.md              # Este archivo: problema, usuarios/clientes y prompt de evaluación
-/docs                  # Enunciado del caso de estudio y convenciones de redacción
+/docs                  # Enunciado del caso, convenciones de redacción y validación del problema
 /Personas              # Un MD por persona / usuario modelo
 /Requirements          # ReqFunc.MD y ReqNoFunc.MD
 /Agents                # Definición de agente por cada persona
@@ -158,6 +218,10 @@ README.md              # Este archivo: problema, usuarios/clientes y prompt de e
 1. Antes de escribir, se lee [`docs/CONVENCIONES.md`](docs/CONVENCIONES.md): fija qué afirma cada
    documento, la forma EARS de los requerimientos funcionales, el escenario de atributo de calidad de
    los no funcionales y la verificación de cada entregable contra la rúbrica de `Eval-Spec`.
+   [`docs/VALIDACION-PROBLEMA.md`](docs/VALIDACION-PROBLEMA.md) fija qué del enunciado está
+   comprobado, qué queda refutado y qué restricción del entorno obliga sin estar enunciada. Una
+   afirmación del enunciado que ese documento refuta no entra en un requerimiento sin supuesto
+   declarado.
 2. Cada quien toma una persona y escribe su MD en `/Personas` + su agente en `/Agents`.
 3. Los requerimientos F y NF se consensúan en grupo antes de commitear.
 4. Ramas por tema (`persona/pablo`, `reqs/funcionales`), PR a `main`.
