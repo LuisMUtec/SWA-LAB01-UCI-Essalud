@@ -65,9 +65,19 @@ del personal médico carecen de supervisión efectiva y no reflejan la hora real
 cuatro fallas verificables por separado: la programación no existe o no sigue la norma; existiendo,
 carece de aprobación de la autoridad que debe darla; aprobada, no se publica; y la ejecución del
 turno no queda registrada de forma que alguien pueda verificarla. El valor del sistema está en
-convertir la programación en un artefacto aprobado, publicado y verificable, no en almacenarla. Los
-cuatro modos de falla son los que debe cubrir el área `RF-TUR`, y son los que sostienen las tareas
-críticas de Carmen.
+convertir la programación en un artefacto aprobado, publicado y verificable, no en almacenarla.
+
+Contrastados los cuatro modos contra el área `RF-TUR`:
+
+| Modo de falla | Estado |
+|---|---|
+| MF-1 — programación inexistente o no conforme | Cubierto por `RF-TUR-01`, `RF-TUR-02` y `RF-TUR-07` |
+| MF-2 — programación sin aprobación de la autoridad | **Sin cubrir.** `RF-TUR-04` permite que la coordinadora publique una modificación que pasa a ser la única vigente sin que ninguna aprobación condicione su validez |
+| MF-3 — programación aprobada no publicada | Cubierto por `RF-TUR-04`, `RF-TUR-05` y `RF-TUR-08` |
+| MF-4 — ejecución del turno no verificable | Cubierto por `RF-SUP-01` y `RF-SUP-03` |
+
+MF-2 es el modo que la Contraloría observó en 6 de los 16 establecimientos auditados. Cubrirlo exige
+un requerimiento del área `RF-TUR` que condicione la vigencia de la programación a su aprobación.
 
 ---
 
@@ -255,6 +265,12 @@ le exige al sistema —referenciar y componer en lugar de pedir de nuevo—, y p
 README y no a `docs/` como nota técnica. Cubre además de forma directa una frustración documentada de
 Rodrigo: «sistemas que le piden ingresar de nuevo datos que ya están en otro sistema».
 
+La salida hacia el registro nacional está enunciada en `RNF-INT-01`. La entrada desde el registro
+institucional ya desplegado no lo está: `RNF-INT-01` toma como fuente el sistema nacional, y
+`RF-REG-06` presenta los resultados de laboratorio e imágenes del episodio sin declarar de dónde
+provienen. Queda abierta la pregunta de la sección final sobre si el piloto lee de ESSI o mantiene
+registro propio; la respuesta decide si `RF-REG-06` describe una vista o un almacén.
+
 ---
 
 ## V-08 — Las metas de rendimiento del enunciado no expresan la exigencia clínica
@@ -294,16 +310,23 @@ rural frente al 84,2 % de la urbana [F27].
 
 ## Consecuencias consolidadas
 
-| Hallazgo | Documento que recibe la consecuencia | Qué cambia |
+| Hallazgo | Dónde aterriza | Estado |
 |---|---|---|
-| V-01 | `README.md` §1 | El problema se enuncia como cuatro fallas verificables de la programación de turnos |
-| V-02 | `README.md` §1 · `Personas/Rodrigo.MD` | La rotación de personal no intensivista es la situación de base; el escenario de Rodrigo es el caso normal |
-| V-03 | `Requirements/ReqFunc.MD` `RF-DIA` | La entrega exige estructura y recepción verificada, no solo persistencia |
-| V-04 | `Requirements/ReqFunc.MD` `RF-ESC` · `README.md` §2.4 | El destinatario y la ventana del escalamiento nocturno están fijados por norma |
-| V-05 | `Requirements/ReqFunc.MD` `RF-ESC` | Notificación dirigida con acuse y escalamiento por vencimiento, no difusión |
-| V-06 | `README.md` §1 · `Requirements/ReqNoFunc.MD` `RNF-ESC` | Las cifras de escala se declaran como supuesto sobre el enunciado |
-| V-07 | `README.md` §1 | El sistema es capa de continuidad sobre ESSI, con salida hacia RENHICE |
-| V-08 | `Requirements/ReqNoFunc.MD` `RNF-DIS`, `RNF-PER` | Disponibilidad condicionada a la ventana de turno; modo degradado; latencia clínica |
+| V-01 | `README.md` §1.1 · `RF-TUR`, `RF-SUP` | Aplicado, salvo MF-2: la vigencia de la programación no depende de su aprobación |
+| V-02 | `README.md` §1.3 · `Personas/Rodrigo.MD` | Aplicado: la rotación de personal no intensivista es la situación de base |
+| V-03 | `RF-DIA-02`, `RF-DIA-04` | Cubierto: la entrega tiene contenido fijado y cierre con autoría e instante |
+| V-04 | `README.md` §2.4 · `RF-ESC-01`, `RF-ESC-07`, `RF-ESC-09` | Aplicado: el destinatario, la delegación y el agotamiento de la cadena están enunciados |
+| V-05 | `RF-ESC-01` a `RF-ESC-06` · `RNF-PER-03` | Cubierto: notificación dirigida, con acuse, severidades separadas y avance por vencimiento |
+| V-06 | `README.md` §1.4 · `RNF-PER-01`, `RNF-PER-03`, `RNF-PER-04`, `RNF-ESC` | Aplicado: el entorno de carga cuenta personas registradas bajo supuesto declarado |
+| V-07 | `README.md` §1.2 · `RNF-INT-01` | Parcial: la salida hacia el registro nacional está enunciada; la entrada desde ESSI, no |
+| V-08 | `README.md` §1.5 · `RNF-DIS-03`, `RNF-DIS-04`, `RNF-PER-04` | Aplicado: modo degradado, operación sin conectividad y latencia del handoff |
+
+Brechas que la validación deja abiertas y que corresponden al equipo decidir:
+
+| # | Brecha | Área |
+|---|---|---|
+| B-1 | Ningún requerimiento condiciona la vigencia de la programación a su aprobación por la autoridad que EsSalud exige | `RF-TUR` |
+| B-2 | Ningún escenario declara la procedencia del registro clínico preexistente que el sistema presenta | `RNF-INT`, `RF-REG-06` |
 
 ## Supuestos declarados
 
