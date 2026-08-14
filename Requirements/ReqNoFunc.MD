@@ -50,7 +50,7 @@ escalamiento— se fijan aquí, en `RNF-PER-03`.
 | Fuente | Profesional clínico que inicia turno |
 | Estímulo | Abre la aplicación en el equipo de la estación o en el dispositivo a pie de cama |
 | Artefacto | Aplicación cliente |
-| Entorno | Operación normal, 10 M sedes registradas, `[SUPUESTO: 2 % de las sedes con actividad concurrente en la ventana de cambio de turno]` |
+| Entorno | Operación normal, 10 M personas registradas, `[SUPUESTO: 2 % con actividad concurrente en la ventana de cambio de turno]` |
 | Respuesta | Se presenta la unidad del profesional con sus camas asignadas, en estado operable |
 | Medida | p95 inferior a 1 s |
 
@@ -76,7 +76,7 @@ escalamiento— se fijan aquí, en `RNF-PER-03`.
 | Fuente | Profesional de enfermería a pie de cama |
 | Estímulo | Emite un escalamiento clasificado como deterioro que exige respuesta inmediata |
 | Artefacto | Servicio de escalamiento y aplicación cliente del destinatario |
-| Entorno | Turno noche, destinatario fuera de la sede sobre enlace móvil de calidad variable, 10 M sedes registradas |
+| Entorno | Turno noche, destinatario fuera de la sede sobre enlace móvil de calidad variable, 10 M personas registradas |
 | Respuesta | El escalamiento queda disponible en el dispositivo del destinatario con su contexto clínico adjunto |
 | Medida | p95 inferior a 15 s desde la emisión. El plazo de acuse antes de avanzar en la cadena es de 90 s para el deterioro inmediato y de 15 min para la consulta diferible |
 
@@ -89,7 +89,7 @@ escalamiento— se fijan aquí, en `RNF-PER-03`.
 | Fuente | Médico del turno entrante |
 | Estímulo | Solicita la entrega de turno de las camas que recibe |
 | Artefacto | Aplicación cliente y servicio de diagnósticos |
-| Entorno | Ventana de cambio de turno, 10 M sedes registradas, `[SUPUESTO: 2 % concurrentes en esa ventana]` |
+| Entorno | Ventana de cambio de turno, 10 M personas registradas, `[SUPUESTO: 2 % concurrentes en esa ventana]` |
 | Respuesta | Se entrega el diagnóstico vigente de cada cama con las decisiones del turno anterior |
 | Medida | p95 inferior a 1 s por cama, para unidades de hasta 20 camas |
 
@@ -158,10 +158,11 @@ escalamiento— se fijan aquí, en `RNF-PER-03`.
 Las cifras de escalamiento del enunciado son **entorno**, no requerimientos por sí solas: cada una se
 enuncia dentro de un escenario con su respuesta y su medida.
 
-`[ACLARAR: qué cuenta como «hospital» en la meta de 10 M a dos años. Perú registra del orden de miles
-de establecimientos de salud, de modo que la cifra no admite lectura literal como sedes hospitalarias.
-Las lecturas posibles —camas, pacientes atendidos, dispositivos conectados— conducen a entornos de
-carga distintos.]`
+La cifra del enunciado no admite lectura como sedes hospitalarias. La pregunta abierta y el supuesto
+bajo el que se trabaja mientras no se responda pertenecen al README, dueño de los supuestos sobre el
+enunciado, y el entorno de los tres escenarios siguientes se declara bajo ese supuesto: la unidad
+contada es la persona registrada en el sistema
+([`README.md`, sección 1.4](../README.md#14-escalamiento-esperado)).
 
 ### RNF-ESC-01 — Carga al lanzamiento
 
@@ -170,9 +171,9 @@ carga distintos.]`
 | Fuente | Conjunto de las sedes incorporadas al piloto |
 | Estímulo | Operan de forma concurrente en la ventana de cambio de turno |
 | Artefacto | Sistema completo |
-| Entorno | 1 K sedes registradas, región de Lima y sus distritos |
+| Entorno | 1 K personas registradas, región de Lima y sus distritos |
 | Respuesta | El sistema atiende la operación sin degradar los umbrales de `RNF-PER-01`, `RNF-PER-03` ni `RNF-PER-04` |
-| Medida | Los umbrales de rendimiento se mantienen en p95 con 1 K sedes registradas |
+| Medida | Los umbrales de rendimiento se mantienen en p95 con 1 K personas registradas |
 
 **Origen:** enunciado del caso, requerimientos de escalamiento.
 
@@ -183,9 +184,9 @@ carga distintos.]`
 | Fuente | Conjunto de las sedes incorporadas tras la expansión a seis meses |
 | Estímulo | Operan de forma concurrente en la ventana de cambio de turno |
 | Artefacto | Sistema completo |
-| Entorno | 100 K sedes registradas, incorporación de regiones adicionales |
+| Entorno | 100 K personas registradas, incorporación de regiones adicionales |
 | Respuesta | El sistema atiende la operación sin degradar los umbrales de rendimiento y sin reescritura de sus componentes |
-| Medida | Los umbrales de rendimiento se mantienen en p95 con 100 K sedes registradas; la incorporación de una región adicional no exige detener la operación de las regiones ya activas |
+| Medida | Los umbrales de rendimiento se mantienen en p95 con 100 K personas registradas; la incorporación de una región adicional no exige detener la operación de las regiones ya activas |
 
 **Origen:** enunciado del caso, requerimientos de escalamiento.
 
@@ -196,9 +197,9 @@ carga distintos.]`
 | Fuente | Conjunto de las sedes incorporadas al cabo de dos años |
 | Estímulo | Operan de forma concurrente en la ventana de cambio de turno |
 | Artefacto | Sistema completo |
-| Entorno | 10 M sedes registradas, `[SUPUESTO: la cifra se interpreta como unidades de cuidados intensivos federadas y no como establecimientos hospitalarios, según el ACLARAR abierto al inicio de esta sección]` |
+| Entorno | 10 M personas registradas, alcance nacional |
 | Respuesta | El sistema atiende la operación sin degradar los umbrales de rendimiento |
-| Medida | Los umbrales de rendimiento se mantienen en p95 con 10 M sedes registradas |
+| Medida | Los umbrales de rendimiento se mantienen en p95 con 10 M personas registradas |
 
 **Origen:** enunciado del caso, requerimientos de escalamiento.
 
@@ -401,19 +402,19 @@ carga distintos.]`
 | Configuración de aplicación inferior a 5 s | `RNF-PER-02` |
 | Disponibilidad del sistema de 99,9 % | `RNF-DIS-01` |
 | Recuperación ante caída inferior a 5 min | `RNF-DIS-02`, `RNF-OBS-01` |
-| Lanzamiento con 1 K sedes | `RNF-ESC-01` |
-| Seis meses con 100 K sedes | `RNF-ESC-02` |
-| Dos años con 10 M sedes | `RNF-ESC-03` |
+| Lanzamiento con 1 K | `RNF-ESC-01` |
+| Seis meses con 100 K | `RNF-ESC-02` |
+| Dos años con 10 M | `RNF-ESC-03` |
 | Diagnóstico disponible en todo momento | `RNF-PER-04`, `RNF-DIS-03`, `RNF-DIS-04` |
 
 ## Cuestiones abiertas
 
 | Marcador | Dónde | Qué condiciona |
 |---|---|---|
-| `[ACLARAR]` unidad de la meta de 10 M | `RNF-ESC` | El entorno de carga de los tres escenarios de escalabilidad |
+| `[ACLARAR]` unidad de las cifras de escalamiento | [`README.md`, sección 1.4](../README.md#14-escalamiento-esperado) | El entorno de carga de los escenarios de rendimiento y escalabilidad |
 | `[ACLARAR]` plazo legal de atención al titular | `RNF-SEG-04` | La medida del escenario de derechos del titular |
 | `[ACLARAR]` perfil de intercambio de la Ley N.° 30024 | `RNF-INT-01` | El formato y el catálogo del intercambio clínico |
-| `[SUPUESTO]` 2 % de sedes concurrentes en el cambio de turno | `RNF-PER-01`, `RNF-PER-04` | El entorno de carga de los escenarios de rendimiento |
+| `[SUPUESTO]` 2 % concurrentes en el cambio de turno | `RNF-PER-01`, `RNF-PER-04` | El entorno de carga de los escenarios de rendimiento |
 | `[SUPUESTO]` plazos de acuse de 90 s y 15 min | `RNF-PER-03` | El umbral que `RF-ESC-02` y `RF-ESC-06` invocan sin fijar |
 | `[SUPUESTO]` interrupción tolerable de 4 h a pie de cama | `RNF-DIS-04` | El alcance de la operación sin conectividad |
 | `[SUPUESTO]` umbrales de esfuerzo de 3 min y 30 s | `RNF-USA-01`, `RNF-USA-02` | El contrapeso de usabilidad de `RF-DIA-01` y `RF-ESC-01` |
