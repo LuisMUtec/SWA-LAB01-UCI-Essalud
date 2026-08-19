@@ -214,7 +214,7 @@ Resultado del agente [`Spec/Eval-Spec.MD`](Spec/Eval-Spec.MD): **80,9 %** (it9, 
 
 ```
 README.md              # Este archivo: problema, usuarios/clientes y evaluación
-/docs                  # Enunciados, convenciones, glosario y decisiones
+/docs                  # Enunciados, convenciones, glosario, decisiones y arquitectura
 /Personas              # Un MD por persona / usuario modelo
 /Requirements          # ReqFunc.MD y ReqNoFunc.MD
 /Agents                # Un agente por persona, más el estándar que comparten
