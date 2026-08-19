@@ -205,8 +205,8 @@ las personas: D1 = 63,0 frente al umbral de 80,0, y la persona más baja en 4,8/
 umbral de 7,0. El cuello de botella de toda la serie es **D1, la satisfacción de las personas** — nunca
 D3 ni D4, que desde it5 se sostienen por encima de 90.
 
-Resultado del agente [`Spec/Eval-Spec.MD`](Spec/Eval-Spec.MD): **80,9 %** (it9, mejor corrida) ·
-**72,7 %** (it11, última corrida, publicada en [`Spec/Eval-Report.MD`](Spec/Eval-Report.MD))
+Resultado del agente [`Spec/Eval-Spec.MD`](Spec/Eval-Spec.MD): **70,0 %** (it12, última corrida,
+publicada en [`Spec/Eval-Report.MD`](Spec/Eval-Report.MD)) · **80,9 %** (it9, mejor corrida)
 
 ---
 
