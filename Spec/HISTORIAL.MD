@@ -21,6 +21,17 @@ Responde la pregunta que ningún reporte individual responde, porque cada corrid
 | 2026-08-15 | 2026-08-15-iteracion-10 | `42c00ba` | `b492237` | — | 54,0 | 83,3 | 99,5 | 100,0 | 60,0 | 90,0 | 77,4 | FAILED |
 | 2026-08-15 | 2026-08-15-iteracion-11 | `4eb06c0` | `b492237` | — | 52,0 | 66,7 | 99,5 | 100,0 | 60,0 | 90,0 | 72,7 | FAILED |
 
+---
+
+Entre it11 e it12 cambió el **instrumento** y no lo medido: `Personas/*.MD` sumó doce dolores
+nuevos —tres por persona— y los cuatro agentes los reflejan. `ReqFunc.MD` es byte a byte el mismo
+documento y la rúbrica tampoco cambió, de modo que it11 e it12 **no son comparables**: su delta no
+es atribuible a `ReqFunc.MD`.
+
+| Fecha | Corrida | ReqFunc | Rúbrica | Instr. | D1 | D2 | D3 | D4 | D5 | D6 | Global | Veredicto |
+|---|---|---|---|:---:|---:|---:|---:|---:|---:|---:|---:|:---:|
+| 2026-08-18 | 2026-08-18-iteracion-12 | `4eb06c0` | `b492237` | — | 43,0 | 66,7 | 99,5 | 100,0 | 60,0 | 90,0 | 70,0 | FAILED |
+
 ## Cómo se lee
 
 - **ReqFunc** y **Rúbrica** son los SHA cortos de lo evaluado y de la vara con que se midió. Dos filas
